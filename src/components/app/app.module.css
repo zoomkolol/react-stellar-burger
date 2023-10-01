@@ -1,7 +1,15 @@
 .app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  max-height: 100vh;
   background-color: #131316;
   color: #f2f2f3;
+}
+
+.burgerConstructor {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  max-height: 100vh;
+  overflow: hidden;
 }

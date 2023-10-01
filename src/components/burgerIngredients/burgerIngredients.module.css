@@ -1,0 +1,21 @@
+.burgerIngredients {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ingredients {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.ingredientList {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 16px;
+  grid-row-gap: 32px;
+  padding: 0;
+  margin: 0;
+}

@@ -1,0 +1,28 @@
+.constructorContainer {
+  max-width: 600px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.elementList {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkoutContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.currencyContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
