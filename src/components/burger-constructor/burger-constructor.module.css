@@ -6,6 +6,12 @@
   overflow: hidden;
 }
 
+.lockedElement {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .elementList {
   overflow-y: scroll;
   overflow-x: hidden;

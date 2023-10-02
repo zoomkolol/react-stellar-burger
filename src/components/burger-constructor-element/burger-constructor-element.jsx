@@ -1,8 +1,10 @@
 import { ConstructorElement, DragIcon, Box, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './burgerConstructorElement.module.css';
+import styles from './burger-constructor-element.module.css';
 import PropTypes from 'prop-types';
 
 function BurgerConstructorElement(props) {
+
+  if(props.type === 'bun') return null
 
   return (
     <div className={ styles.element }>
@@ -17,6 +19,7 @@ function BurgerConstructorElement(props) {
 }
 
 BurgerConstructorElement.propTypes = {
+  type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired
