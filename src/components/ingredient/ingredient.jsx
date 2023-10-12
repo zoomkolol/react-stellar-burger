@@ -6,9 +6,9 @@ function Ingredient(props) {
   if(props.type !== props.ingredientType) return null
 
   return (
-    <li className={ styles.ingredientContainer + ' pl-4'}>
+    <li onClick={props.onClick} className={ styles.ingredientContainer + ' pl-4'}>
       <img className='pl-4 pr-4' src={props.image} alt={ props.name } />
-      <div className={ styles.priceContainer + ' pt-1 pb-1' }>
+      <div className={ `${styles.priceContainer} pt-1 pb-1` }>
         <p className="text text_type_digits-default">{props.price}</p>
         <CurrencyIcon type="primary" />
       </div>

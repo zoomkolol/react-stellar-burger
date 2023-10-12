@@ -23,6 +23,7 @@
 
 .navLinkContainer {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .logo {
