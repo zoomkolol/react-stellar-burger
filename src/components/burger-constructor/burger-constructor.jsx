@@ -1,21 +1,15 @@
 import React from 'react';
 import { Button, ConstructorElement, CurrencyIcon, Box, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
-import ModalOverlay from '../modal-overlay/modal-overlay';
+import Modal from '../modal/modal';
 import BurgerConstructorElement from '../burger-constructor-element/burger-constructor-element';
 import OrderDetails from '../order-details/order-details';
+import { useModal } from '../../hooks/useModal';
+import { ingredientPropType } from "../../utils/prop-types.js";
 
-function BurgerConstructor(props) {
+function BurgerConstructor(ingredient) {
 
-  const [openModal, setOpenModal] = React.useState(false);
-
-  function handleOpenModal() {
-    setOpenModal(true);
-  }
-
-  function handleCloseModal() {
-    setOpenModal(false);
-  }
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   return (
     <div className={ `${styles.constructorContainer} pt-25 pl-4 pr-4` }>
@@ -29,8 +23,8 @@ function BurgerConstructor(props) {
       />
       </div>
       <div className={ `${styles.elementList} custom-scroll` }>
-        {props.data.map((element) => (
-          <BurgerConstructorElement key={element._id} {...element} />
+        {ingredient.data.map((ingredient) => (
+          <BurgerConstructorElement key={ingredient._id} {...ingredient} />
         ))}
       </div>
       <div className={ `${styles.lockedElement} pl-6 pr-3 pt-4` }>
@@ -47,17 +41,21 @@ function BurgerConstructor(props) {
           <p className="text text_type_digits-medium">610</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button onClick={handleOpenModal} htmlType="button" type="primary" size="medium">
+        <Button onClick={openModal} htmlType="button" type="primary" size="medium">
           Оформить заказ
         </Button>
       </div>
-      {openModal &&
-        <ModalOverlay onClose={handleCloseModal}>
+      {isModalOpen &&
+        <Modal onClose={closeModal}>
           <OrderDetails />
-        </ModalOverlay>
+        </Modal>
       }
     </div>
   );
+}
+
+BurgerConstructor.propTypes = {
+  ingredient: ingredientPropType
 }
 
 export default BurgerConstructor;

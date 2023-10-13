@@ -1,23 +1,21 @@
 import React from 'react';
 import Ingredient from '../ingredient/ingredient';
-import ModalOverlay from '../modal-overlay/modal-overlay';
+import Modal from '../modal/modal';
 import { Tab, Box, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import { useModal } from '../../hooks/useModal';
+import { ingredientPropType } from "../../utils/prop-types.js";
 
-function BurgerIngredients(props) {
+function BurgerIngredients(ingredient) {
   const [current, setCurrent] = React.useState('Булки');
-  const [openModal, setOpenModal] = React.useState(false);
   const [currentIngredientInfo, setCurrentIngredientInfo] = React.useState({});
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   function handleOpenModal(ingredient) {
     setCurrentIngredientInfo(ingredient);
-    setOpenModal(true);
+    openModal();
     console.log(ingredient);
-  }
-
-  function handleCloseModal() {
-    setOpenModal(false);
   }
 
   return (
@@ -37,30 +35,34 @@ function BurgerIngredients(props) {
       <div className={ `${styles.ingredients} custom-scroll` }>
         <h2 className="text text_type_main-medium pb-6">Булки</h2>
         <ul className={ styles.ingredientList }>
-          {props.data.map((ingredient) => (
+          {ingredient.data.map((ingredient) => (
             <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} {...ingredient} ingredientType='bun' />
           ))}
         </ul>
         <h2 className="text text_type_main-medium pt-10 pb-6">Соусы</h2>
         <ul className={ styles.ingredientList }>
-          {props.data.map((ingredient) => (
+          {ingredient.data.map((ingredient) => (
             <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} {...ingredient} ingredientType='sauce' />
           ))}
         </ul>
         <h2 className="text text_type_main-medium pt-10 pb-6">Начинки</h2>
         <ul className={ styles.ingredientList }>
-          {props.data.map((ingredient) => (
+          {ingredient.data.map((ingredient) => (
             <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} {...ingredient} ingredientType='main' />
           ))}
         </ul>
       </div>
-      {openModal &&
-        <ModalOverlay onClose={handleCloseModal} title='Детали ингридиента'>
+      {isModalOpen &&
+        <Modal onClose={closeModal} title='Детали ингридиента'>
           <IngredientDetails ingredient={currentIngredientInfo} />
-        </ModalOverlay>
+        </Modal>
       }
     </section>
   );
+}
+
+BurgerIngredients.propTypes = {
+  ingredient: ingredientPropType
 }
 
 export default BurgerIngredients;

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ingredient-details.module.css';
 import { Typography } from '@ya.praktikum/react-developer-burger-ui-components'
-import PropTypes from "prop-types";
+import { ingredientPropType } from "../../utils/prop-types.js";
 
 export default function IngredientDetails({ ingredient }) {
   return (
@@ -31,5 +31,5 @@ export default function IngredientDetails({ ingredient }) {
 }
 
 IngredientDetails.propTypes = {
-  ingredient: PropTypes.object.isRequired
+  ingredient: ingredientPropType.isRequired
 }

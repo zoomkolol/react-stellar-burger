@@ -3,7 +3,7 @@ import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { useEffect, useState } from "react";
-import ModalOverlay from "../modal-overlay/modal-overlay";
+import Modal from "../modal/modal";
 
 function App() {
   const [state, setState] = useState({

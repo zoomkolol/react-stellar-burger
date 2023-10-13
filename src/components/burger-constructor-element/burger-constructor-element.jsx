@@ -1,28 +1,25 @@
 import { ConstructorElement, DragIcon, Box, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor-element.module.css';
-import PropTypes from 'prop-types';
+import { ingredientPropType } from "../../utils/prop-types.js";
 
-function BurgerConstructorElement(props) {
+function BurgerConstructorElement(ingredient) {
 
-  if(props.type === 'bun') return null
+  if(ingredient.type === 'bun') return null
 
   return (
     <div className={ styles.element }>
       <DragIcon type="primary" />
       <ConstructorElement
-        text={props.name}
-        thumbnail={props.image}
-        price={props.price}
+        text={ingredient.name}
+        thumbnail={ingredient.image}
+        price={ingredient.price}
       />
     </div>
   );
 }
 
 BurgerConstructorElement.propTypes = {
-  type: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired
+  ingredient: ingredientPropType
 }
 
 export default BurgerConstructorElement;

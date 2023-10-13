@@ -1,27 +1,26 @@
 import PropTypes from "prop-types";
 import { Counter, CurrencyIcon, Box, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient.module.css';
+import { ingredientPropType } from "../../utils/prop-types.js";
 
-function Ingredient(props) {
-  if(props.type !== props.ingredientType) return null
+function Ingredient(ingredient) {
+  if(ingredient.type !== ingredient.ingredientType) return null
 
   return (
-    <li onClick={props.onClick} className={ styles.ingredientContainer + ' pl-4'}>
-      <img className='pl-4 pr-4' src={props.image} alt={ props.name } />
+    <li onClick={ingredient.onClick} className={ styles.ingredientContainer + ' pl-4'}>
+      <img className='pl-4 pr-4' src={ingredient.image} alt={ ingredient.name } />
       <div className={ `${styles.priceContainer} pt-1 pb-1` }>
-        <p className="text text_type_digits-default">{props.price}</p>
+        <p className="text text_type_digits-default">{ingredient.price}</p>
         <CurrencyIcon type="primary" />
       </div>
-      <p className="text text_type_main-small">{props.name}</p>
+      <p className="text text_type_main-small">{ingredient.name}</p>
       <Counter count={1} size="default" extraClass="m-1" />
     </li>
   );
 }
 
 Ingredient.propTypes = {
-  image: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired
+  ingredient: ingredientPropType
 }
 
 export default Ingredient;
