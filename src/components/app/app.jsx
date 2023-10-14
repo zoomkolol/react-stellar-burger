@@ -1,15 +1,55 @@
 import styles from "./app.module.css";
-import { data } from "../../utils/data";
+import AppHeader from "../app-header/app-header";
+import BurgerIngredients from "../burger-ingredients/burger-ingredients";
+import BurgerConstructor from "../burger-constructor/burger-constructor";
+import { useEffect, useState } from "react";
+import Modal from "../modal/modal";
+import PropTypes from 'prop-types';
+
 
 function App() {
+  const [state, setState] = useState({
+    ingredients: [],
+    loading: false
+  });
+  const fetchUrl = 'https://norma.nomoreparties.space/api/ingredients';
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setState({ ...state, loading: true });
+      try {
+        const response = await fetch(fetchUrl);
+
+        if (!response.ok) {
+          throw new Error(`Ошибка: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setState({
+          ingredients: data.data,
+          loading: false
+        });
+      } catch (err) {
+        console.log(err);
+        setState({
+          ingredients: null,
+          loading: false
+        });
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div className={styles.app}>
-      <pre style={{
-      	margin: "auto",
-      	fontSize: "1.5rem"
-      }}>
-      	Измените src/components/app/app.jsx и сохраните для обновления.
-      </pre>
+    <div id="app" className={styles.app}>
+      <AppHeader />
+      {!state.loading && (
+        <main className={styles.burgerConstructor}>
+          <BurgerIngredients ingredients={state.ingredients} />
+          <BurgerConstructor ingredients={state.ingredients} />
+        </main>
+      )}
     </div>
   );
 }

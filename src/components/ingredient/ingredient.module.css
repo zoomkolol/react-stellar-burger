@@ -1,0 +1,12 @@
+.ingredientContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.priceContainer {
+  display: flex;
+  column-gap: 8px;
+}
