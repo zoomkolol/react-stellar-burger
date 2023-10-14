@@ -6,8 +6,9 @@ import styles from './burger-ingredients.module.css';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import { useModal } from '../../hooks/useModal';
 import { ingredientPropType } from "../../utils/prop-types.js";
+import PropTypes from 'prop-types';
 
-function BurgerIngredients(ingredient) {
+function BurgerIngredients({ingredients}) {
   const [current, setCurrent] = React.useState('Булки');
   const [currentIngredientInfo, setCurrentIngredientInfo] = React.useState({});
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -35,20 +36,20 @@ function BurgerIngredients(ingredient) {
       <div className={ `${styles.ingredients} custom-scroll` }>
         <h2 className="text text_type_main-medium pb-6">Булки</h2>
         <ul className={ styles.ingredientList }>
-          {ingredient.data.map((ingredient) => (
-            <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} {...ingredient} ingredientType='bun' />
+          {ingredients.map((ingredient) => (
+            <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} ingredient={ingredient} ingredientType='bun' />
           ))}
         </ul>
         <h2 className="text text_type_main-medium pt-10 pb-6">Соусы</h2>
         <ul className={ styles.ingredientList }>
-          {ingredient.data.map((ingredient) => (
-            <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} {...ingredient} ingredientType='sauce' />
+          {ingredients.map((ingredient) => (
+            <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} ingredient={ingredient} ingredientType='sauce' />
           ))}
         </ul>
         <h2 className="text text_type_main-medium pt-10 pb-6">Начинки</h2>
         <ul className={ styles.ingredientList }>
-          {ingredient.data.map((ingredient) => (
-            <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} {...ingredient} ingredientType='main' />
+          {ingredients.map((ingredient) => (
+            <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} ingredient={ingredient} ingredientType='main' />
           ))}
         </ul>
       </div>
@@ -62,7 +63,7 @@ function BurgerIngredients(ingredient) {
 }
 
 BurgerIngredients.propTypes = {
-  ingredient: ingredientPropType
+  ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired
 }
 
 export default BurgerIngredients;

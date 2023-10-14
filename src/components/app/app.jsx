@@ -4,6 +4,8 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { useEffect, useState } from "react";
 import Modal from "../modal/modal";
+import PropTypes from 'prop-types';
+
 
 function App() {
   const [state, setState] = useState({
@@ -23,7 +25,6 @@ function App() {
         }
 
         const data = await response.json();
-
         setState({
           ingredients: data.data,
           loading: false
@@ -45,8 +46,8 @@ function App() {
       <AppHeader />
       {!state.loading && (
         <main className={styles.burgerConstructor}>
-          <BurgerIngredients data={state.ingredients} />
-          <BurgerConstructor data={state.ingredients} />
+          <BurgerIngredients ingredients={state.ingredients} />
+          <BurgerConstructor ingredients={state.ingredients} />
         </main>
       )}
     </div>

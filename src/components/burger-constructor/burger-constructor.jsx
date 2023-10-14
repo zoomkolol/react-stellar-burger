@@ -6,8 +6,9 @@ import BurgerConstructorElement from '../burger-constructor-element/burger-const
 import OrderDetails from '../order-details/order-details';
 import { useModal } from '../../hooks/useModal';
 import { ingredientPropType } from "../../utils/prop-types.js";
+import PropTypes from 'prop-types';
 
-function BurgerConstructor(ingredient) {
+function BurgerConstructor({ingredients}) {
 
   const { isModalOpen, openModal, closeModal } = useModal();
 
@@ -23,8 +24,8 @@ function BurgerConstructor(ingredient) {
       />
       </div>
       <div className={ `${styles.elementList} custom-scroll` }>
-        {ingredient.data.map((ingredient) => (
-          <BurgerConstructorElement key={ingredient._id} {...ingredient} />
+        {ingredients.map((ingredient) => (
+          <BurgerConstructorElement key={ingredient._id} ingredient={ingredient} />
         ))}
       </div>
       <div className={ `${styles.lockedElement} pl-6 pr-3 pt-4` }>
@@ -55,7 +56,7 @@ function BurgerConstructor(ingredient) {
 }
 
 BurgerConstructor.propTypes = {
-  ingredient: ingredientPropType
+  ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired
 }
 
 export default BurgerConstructor;

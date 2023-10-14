@@ -3,11 +3,11 @@ import { Counter, CurrencyIcon, Box, Typography } from '@ya.praktikum/react-deve
 import styles from './ingredient.module.css';
 import { ingredientPropType } from "../../utils/prop-types.js";
 
-function Ingredient(ingredient) {
-  if(ingredient.type !== ingredient.ingredientType) return null
+function Ingredient({onClick, ingredient, ingredientType }) {
+  if(ingredient.type !== ingredientType) return null
 
   return (
-    <li onClick={ingredient.onClick} className={ styles.ingredientContainer + ' pl-4'}>
+    <li onClick={onClick} className={ styles.ingredientContainer + ' pl-4'}>
       <img className='pl-4 pr-4' src={ingredient.image} alt={ ingredient.name } />
       <div className={ `${styles.priceContainer} pt-1 pb-1` }>
         <p className="text text_type_digits-default">{ingredient.price}</p>

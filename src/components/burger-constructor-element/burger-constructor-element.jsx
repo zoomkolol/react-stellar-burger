@@ -2,7 +2,7 @@ import { ConstructorElement, DragIcon, Box, Typography } from '@ya.praktikum/rea
 import styles from './burger-constructor-element.module.css';
 import { ingredientPropType } from "../../utils/prop-types.js";
 
-function BurgerConstructorElement(ingredient) {
+function BurgerConstructorElement({ ingredient }) {
 
   if(ingredient.type === 'bun') return null
 
