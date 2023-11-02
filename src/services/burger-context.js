@@ -1,25 +1,9 @@
 import React, { useContext } from "react";
-import { fetchIngredients } from "./api";
 
 const BurgerContext = React.createContext(null);
 
 export function BurgerProvider({ children }) {
   const [burgerState, dispatch] = React.useReducer(burgerReducer, initialBurger);
-
-  React.useEffect(() => {
-    async function getInitialBun() {
-      try {
-        const data = await fetchIngredients();
-        const bunArray = data.data.filter(function (element) {
-          return element.type === 'bun'
-        })
-        dispatch({type: 'ADD_BUN', bun: bunArray[0]})
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    getInitialBun();
-  }, []);
 
   return (
     <BurgerContext.Provider value={{burgerState, dispatch}}>
@@ -51,11 +35,23 @@ function burgerReducer(burger, action) {
 
       }
     }
+    case 'RESET_CONSTRUCTOR': {
+      return {
+        bun: {},
+        ingredients: []
+      }
+    }
     default: {
       throw Error('Неверный тип action: ' + action.type);
     }
   }
 }
+
+export const dispatchBurgerAction = dispatch => ({
+  addBun: bun => dispatch({type: 'ADD_BUN', bun}),
+  addIngredient: ingredient => dispatch({type: 'ADD_INGREDIENT', ingredient}),
+  resetConstructor: () => dispatch({type: 'RESET_CONSTRUCTOR'})
+})
 
 const initialBurger = {
   bun: {},
@@ -63,3 +59,4 @@ const initialBurger = {
 };
 
 
+//TODO: СДЕЛАТЬ РЕСЕТ КОНСТРУКТОРА!

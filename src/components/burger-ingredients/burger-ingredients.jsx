@@ -6,8 +6,8 @@ import styles from './burger-ingredients.module.css';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import { useModal } from '../../hooks/useModal';
 import { useIngredients } from '../../services/ingredients-context';
-import { useBurger } from '../../services/burger-context';
-import { useTotalPrice } from '../../services/total-price-context';
+import { useBurger, dispatchBurgerAction } from '../../services/burger-context';
+import { useTotalPrice, dispatchTotalPriceAction } from '../../services/total-price-context';
 
 function BurgerIngredients() {
   const [current, setCurrent] = React.useState('Булки');
@@ -15,7 +15,9 @@ function BurgerIngredients() {
   const { isModalOpen, openModal, closeModal } = useModal();
   const ingredients = useIngredients();
   const { dispatch: burgerDispatch } = useBurger();
+  const burgerActions = dispatchBurgerAction(burgerDispatch);
   const { dispatch: totalPriceDispatch } = useTotalPrice();
+  const totalPriceActions = dispatchTotalPriceAction(totalPriceDispatch);
 
   function handleOpenModal(ingredient) {
     setCurrentIngredientInfo(ingredient);
@@ -42,8 +44,8 @@ function BurgerIngredients() {
           {ingredients.map((ingredient) => (
             <Ingredient onClick={() => {
               handleOpenModal(ingredient);
-              burgerDispatch({type: 'ADD_BUN', bun: ingredient});
-              totalPriceDispatch({type: 'ADD_BUN_PRICE', amount: ingredient.price});
+              burgerActions.addBun(ingredient);
+              totalPriceActions.addBunPrice(ingredient.price);
             }}
             key={ingredient._id} ingredient={ingredient} ingredientType='bun' />
           ))}
@@ -53,8 +55,8 @@ function BurgerIngredients() {
           {ingredients.map((ingredient) => (
             <Ingredient onClick={() => {
               handleOpenModal(ingredient);
-              burgerDispatch({type: 'ADD_INGREDIENT', ingredient: ingredient});
-              totalPriceDispatch({type: 'ADD_INGREDIENT_PRICE', amount: ingredient.price});
+              burgerActions.addIngredient(ingredient);
+              totalPriceActions.addIngredientPrice(ingredient.price);
             }}
             key={ingredient._id} ingredient={ingredient} ingredientType='sauce' />
           ))}
@@ -64,8 +66,8 @@ function BurgerIngredients() {
           {ingredients.map((ingredient) => (
             <Ingredient onClick={() => {
               handleOpenModal(ingredient);
-              burgerDispatch({type: 'ADD_INGREDIENT', ingredient: ingredient});
-              totalPriceDispatch({type: 'ADD_INGREDIENT_PRICE', amount: ingredient.price});
+              burgerActions.addIngredient(ingredient);
+              totalPriceActions.addIngredientPrice(ingredient.price);
             }}
             key={ingredient._id} ingredient={ingredient} ingredientType='main' />
           ))}

@@ -5,19 +5,20 @@ import Modal from '../modal/modal';
 import BurgerConstructorElement from '../burger-constructor-element/burger-constructor-element';
 import OrderDetails from '../order-details/order-details';
 import { useModal } from '../../hooks/useModal';
-import { useBurger } from '../../services/burger-context';
+import { useBurger, dispatchBurgerAction } from '../../services/burger-context';
 import { useTotalPrice } from '../../services/total-price-context';
-import { v4 as uuidv4 } from 'uuid';
 import { getOrderDetails } from '../../services/api';
 
 function BurgerConstructor() {
-
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { burgerState } = useBurger();
+  const { burgerState, dispatch: burgerDispatch } = useBurger();
+  const burgerActions = dispatchBurgerAction(burgerDispatch);
   const { state } = useTotalPrice();
   const [ orderId, setOrderId ] = React.useState(0);
+  const [loading, setLoading] = React.useState(false)
 
   function getIngredientsId() {
+    setLoading(true);
     const ingredientsIdArr = [];
     ingredientsIdArr.push(burgerState.bun._id);
     burgerState.ingredients.forEach(ingredient => {
@@ -27,6 +28,8 @@ function BurgerConstructor() {
     getOrderDetails(ingredientsIdArr)
     .then((data) => {
       setOrderId(data.order.number);
+      burgerActions.resetConstructor();
+      setLoading(false);
     })
     .catch(err => console.log(err));
   }
@@ -47,7 +50,7 @@ function BurgerConstructor() {
       {burgerState.ingredients !== undefined && (
         <div className={ `${styles.elementList} custom-scroll` }>
           {burgerState.ingredients.map((ingredient) => (
-            <BurgerConstructorElement key={uuidv4()} ingredient={ingredient} />
+            <BurgerConstructorElement key={ingredient._id} ingredient={ingredient} />
           ))}
         </div>
       )}
@@ -62,7 +65,8 @@ function BurgerConstructor() {
         />
         </div>
       )}
-      <div className={ `${styles.checkoutContainer} pt-10` }>
+      {(burgerState.ingredients.length > 0 && burgerState.bun.name !== undefined) &&
+      (<div className={ `${styles.checkoutContainer} pt-10` }>
         <div className={ `${styles.currencyContainer} pr-10` }>
           <p className="text text_type_digits-medium">{state.bunPrice * 2 + state.ingredientPrice}</p>
           <CurrencyIcon type="primary" />
@@ -73,7 +77,7 @@ function BurgerConstructor() {
         }} htmlType="button" type="primary" size="medium">
           Оформить заказ
         </Button>
-      </div>
+      </div>)}
       {isModalOpen &&
         <Modal onClose={closeModal}>
           <OrderDetails orderId={orderId}/>

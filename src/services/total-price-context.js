@@ -32,7 +32,8 @@ function reducer(state, action) {
     }
     case 'RESET_PRICE': {
       return {
-        totalPrice: 0,
+        bunPrice: 0,
+        ingredientPrice: 0
       }
     }
     default: {
@@ -40,6 +41,12 @@ function reducer(state, action) {
     }
   }
 }
+
+export const dispatchTotalPriceAction = dispatch => ({
+  addBunPrice: amount => dispatch({type: 'ADD_BUN_PRICE', amount}),
+  addIngredientPrice: amount => dispatch({type: 'ADD_INGREDIENT_PRICE', amount}),
+  resetPrice: () => dispatch({type: 'RESET_PRICE'})
+})
 
 const initialState = {
   bunPrice: 0,

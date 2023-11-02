@@ -2,7 +2,6 @@ import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import { useEffect, useState, useReducer } from "react";
 import { IngredientsProvider } from "../../services/ingredients-context";
 import { BurgerProvider } from "../../services/burger-context";
 import { TotalPriceProvider } from "../../services/total-price-context";

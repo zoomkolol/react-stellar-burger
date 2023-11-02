@@ -10,23 +10,20 @@ export function IngredientsProvider({ children }) {
   });
 
   React.useEffect(() => {
-    async function getIngredients() {
-      try {
-        const data = await fetchIngredients();
-        setState({
-          ingredients: data.data,
-          loading: false
-        });
-      } catch (err) {
-        console.log(err);
-        setState({
-          ingredients: {},
-          loading: false
-        });
-      }
-    }
-
-    getIngredients();
+    fetchIngredients()
+    .then((data) => {
+      setState({
+        ingredients: data.data,
+        loading: false
+      });
+    })
+    .catch(err => {
+      console.log(err)
+      setState({
+        ingredients: {},
+        loading: false
+      });
+    })
   }, []);
 
   return (

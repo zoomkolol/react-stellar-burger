@@ -1,39 +1,28 @@
-export const fetchIngredients = async () => {
-  const fetchUrl = 'https://norma.nomoreparties.space/api/ingredients';
+import request from "../utils/request";
 
-  try {
-    const response = await fetch(fetchUrl);
+const config ={
+  headers: {
+    "Content-Type": "application/json",
+  },
+}
 
-    if (!response.ok) {
-      throw new Error(`Ошибка: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    return data;
-
-  } catch (err) {
-    throw err;
+export function fetchIngredients() {
+  const settings = {
+    method: 'GET',
+    headers: config.headers
   }
+
+  return request('/ingredients', settings)
 };
 
 export const getOrderDetails = async (ingredients) => {
-  const fetchUrl = 'https://norma.nomoreparties.space/api/orders';
   const settings = {
     method: 'POST',
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: config.headers,
     body: JSON.stringify({
       'ingredients': ingredients
     })
   }
 
-  try {
-    const response = await fetch(fetchUrl, settings)
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    throw err;
-  }
+  return request('/orders', settings);
 }
