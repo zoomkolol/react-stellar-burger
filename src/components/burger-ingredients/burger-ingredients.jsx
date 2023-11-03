@@ -5,18 +5,23 @@ import { Tab, Box, Typography } from '@ya.praktikum/react-developer-burger-ui-co
 import styles from './burger-ingredients.module.css';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import { useModal } from '../../hooks/useModal';
-import { ingredientPropType } from "../../utils/prop-types.js";
-import PropTypes from 'prop-types';
+import { useIngredients } from '../../services/ingredients-context';
+import { useBurger, dispatchBurgerAction } from '../../services/burger-context';
+import { useTotalPrice, dispatchTotalPriceAction } from '../../services/total-price-context';
 
-function BurgerIngredients({ingredients}) {
+function BurgerIngredients() {
   const [current, setCurrent] = React.useState('Булки');
   const [currentIngredientInfo, setCurrentIngredientInfo] = React.useState({});
   const { isModalOpen, openModal, closeModal } = useModal();
+  const ingredients = useIngredients();
+  const { dispatch: burgerDispatch } = useBurger();
+  const burgerActions = dispatchBurgerAction(burgerDispatch);
+  const { dispatch: totalPriceDispatch } = useTotalPrice();
+  const totalPriceActions = dispatchTotalPriceAction(totalPriceDispatch);
 
   function handleOpenModal(ingredient) {
     setCurrentIngredientInfo(ingredient);
     openModal();
-    console.log(ingredient);
   }
 
   return (
@@ -37,19 +42,34 @@ function BurgerIngredients({ingredients}) {
         <h2 className="text text_type_main-medium pb-6">Булки</h2>
         <ul className={ styles.ingredientList }>
           {ingredients.map((ingredient) => (
-            <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} ingredient={ingredient} ingredientType='bun' />
+            <Ingredient onClick={() => {
+              handleOpenModal(ingredient);
+              burgerActions.addBun(ingredient);
+              totalPriceActions.addBunPrice(ingredient.price);
+            }}
+            key={ingredient._id} ingredient={ingredient} ingredientType='bun' />
           ))}
         </ul>
         <h2 className="text text_type_main-medium pt-10 pb-6">Соусы</h2>
         <ul className={ styles.ingredientList }>
           {ingredients.map((ingredient) => (
-            <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} ingredient={ingredient} ingredientType='sauce' />
+            <Ingredient onClick={() => {
+              handleOpenModal(ingredient);
+              burgerActions.addIngredient(ingredient);
+              totalPriceActions.addIngredientPrice(ingredient.price);
+            }}
+            key={ingredient._id} ingredient={ingredient} ingredientType='sauce' />
           ))}
         </ul>
         <h2 className="text text_type_main-medium pt-10 pb-6">Начинки</h2>
         <ul className={ styles.ingredientList }>
           {ingredients.map((ingredient) => (
-            <Ingredient onClick={() => handleOpenModal(ingredient)} key={ingredient._id} ingredient={ingredient} ingredientType='main' />
+            <Ingredient onClick={() => {
+              handleOpenModal(ingredient);
+              burgerActions.addIngredient(ingredient);
+              totalPriceActions.addIngredientPrice(ingredient.price);
+            }}
+            key={ingredient._id} ingredient={ingredient} ingredientType='main' />
           ))}
         </ul>
       </div>
@@ -60,10 +80,6 @@ function BurgerIngredients({ingredients}) {
       }
     </section>
   );
-}
-
-BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired
 }
 
 export default BurgerIngredients;
