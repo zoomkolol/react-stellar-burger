@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 
 export default function IngredientDetails() {
 
-  const ingredient = useSelector(state => state.ingredientDetails.ingredient)
+  const getIngredient = state => state.ingredientDetails.ingredient;
+  const ingredient = useSelector(getIngredient);
 
   return (
     <div className={ styles.container }>

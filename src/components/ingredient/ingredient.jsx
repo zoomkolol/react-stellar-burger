@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Counter, CurrencyIcon, Box, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient.module.css';
 import { ingredientPropType } from "../../common/utils/prop-types.js";
@@ -7,7 +6,8 @@ import { useSelector } from "react-redux";
 
 function Ingredient({onClick, ingredient }) {
 
-  const burgerConstructorData = useSelector(state => state.burgerConstructor);
+  const getBurgerConstructorData = state => state.burgerConstructor;
+  const burgerConstructorData = useSelector(getBurgerConstructorData);
 
   const count = () => {
     if(ingredient.type === 'bun') {

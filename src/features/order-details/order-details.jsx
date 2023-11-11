@@ -3,7 +3,8 @@ import done from '../../images/done.png'
 import { useSelector } from 'react-redux';
 
 export default function OrderDetails() {
-  const orderId = useSelector(state => state.orderDetails.orderId);
+  const getOrderId = state => state.orderDetails.orderId;
+  const orderId = useSelector(getOrderId);
 
   return (
     <div className={ styles.container }>

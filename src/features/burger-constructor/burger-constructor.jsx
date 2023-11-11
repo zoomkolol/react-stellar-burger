@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import Modal from '../../components/modal/modal';
@@ -13,10 +13,14 @@ import { addIngredient, addBun } from './burger-constructor-slice';
 
 
 function BurgerConstructor() {
-  const bun = useSelector(state => state.burgerConstructor.bun);
-  const ingredients = useSelector(state => state.burgerConstructor.ingredients);
-  const bunPrice = useSelector(state => state.burgerConstructor.bunPrice);
-  const ingredientPrice = useSelector(state => state.burgerConstructor.ingredientPrice);
+  const getBun = state => state.burgerConstructor.bun;
+  const bun = useSelector(getBun);
+  const getIngredients = state => state.burgerConstructor.ingredients;
+  const ingredients = useSelector(getIngredients);
+  const getBunPrice = state => state.burgerConstructor.bunPrice;
+  const bunPrice = useSelector(getBunPrice);
+  const getIngredientsPrice = state => state.burgerConstructor.ingredientPrice;
+  const ingredientPrice = useSelector(getIngredientsPrice);
   const dispatch = useDispatch();
 
 
@@ -54,6 +58,12 @@ function BurgerConstructor() {
     }
   }
 
+  const renderIng = useCallback((key, index, ingredient) => {
+    return (
+      <BurgerConstructorElement key={key} index={index} ingredient={ingredient} />
+    )
+  }, [])
+
   return (
     <div  ref={dropTarget} className={ `${styles.constructorContainer} pt-25 pl-4 pr-4` }>
       {(bun.name === undefined && ingredients.length === 0) && (
@@ -74,7 +84,7 @@ function BurgerConstructor() {
       {ingredients !== undefined && (
         <div className={ `${styles.elementList} custom-scroll` }>
           {ingredients.map((ingredient, index) => (
-            <BurgerConstructorElement key={ingredient.uniqueId} index={index} ingredient={ingredient} />
+            renderIng(ingredient.uniqueId, index, ingredient)
           ))}
         </div>
       )}

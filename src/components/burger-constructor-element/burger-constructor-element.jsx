@@ -2,17 +2,17 @@ import { ConstructorElement, DragIcon, Box, Typography } from '@ya.praktikum/rea
 import styles from './burger-constructor-element.module.css';
 import { ingredientPropType } from "../../common/utils/prop-types.js";
 import { useDrag, useDrop } from 'react-dnd'
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { sortIngredients, deleteIngredient } from '../../features/burger-constructor/burger-constructor-slice';
+import { sortIngredients, deleteIngredient, switchIngredients } from '../../features/burger-constructor/burger-constructor-slice';
 
 function BurgerConstructorElement({ ingredient, index }) {
   const dispatch = useDispatch();
   const ref = useRef(null);
 
-  const moveIngredient = (dragIndex, hoverIndex) => {
+  const moveIngredient = useCallback((dragIndex, hoverIndex) => {
     dispatch(sortIngredients({dragIndex, hoverIndex}));
-  }
+  }, [])
 
   const [, drop] = useDrop({
     accept: 'ingredient',
@@ -23,6 +23,10 @@ function BurgerConstructorElement({ ingredient, index }) {
 
       const dragIndex = item.index;
       const hoverIndex = index;
+
+      if (dragIndex === hoverIndex) {
+        return
+      }
 
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;

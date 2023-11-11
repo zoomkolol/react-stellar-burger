@@ -12,7 +12,8 @@ import { addIngredientDetails, deleteIngredientDetails } from '../ingredient-det
 function BurgerIngredients() {
   const [currentTab, setCurrentTab] = React.useState('Булки');
   const { isModalOpen, openModal, closeModal } = useModal();
-  const ingredients = useSelector(state => state.burgerIngredients.ingredients);
+  const getIngredients = state => state.burgerIngredients.ingredients;
+  const ingredients = useSelector(getIngredients);
   const dispatch = useDispatch();
 
 

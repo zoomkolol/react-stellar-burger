@@ -8,8 +8,8 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 function App() {
   return (
     <div id="app" className={styles.app}>
+      <AppHeader />
       <DndProvider backend={HTML5Backend}>
-        <AppHeader />
         <main className={styles.burgerConstructor}>
           <BurgerIngredients />
           <BurgerConstructor />
