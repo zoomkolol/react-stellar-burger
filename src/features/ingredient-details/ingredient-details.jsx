@@ -1,9 +1,11 @@
-import React from 'react';
 import styles from './ingredient-details.module.css';
 import { Typography } from '@ya.praktikum/react-developer-burger-ui-components'
-import { ingredientPropType } from "../../utils/prop-types.js";
+import { useSelector } from 'react-redux';
 
-export default function IngredientDetails({ ingredient }) {
+export default function IngredientDetails() {
+
+  const ingredient = useSelector(state => state.ingredientDetails.ingredient)
+
   return (
     <div className={ styles.container }>
       <img src={ingredient.image_large} alt={ingredient.name} />
@@ -28,8 +30,4 @@ export default function IngredientDetails({ ingredient }) {
       </div>
     </div>
   )
-}
-
-IngredientDetails.propTypes = {
-  ingredient: ingredientPropType.isRequired
 }
