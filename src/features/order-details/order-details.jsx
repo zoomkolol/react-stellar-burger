@@ -1,8 +1,11 @@
-import React from 'react';
 import styles from './order-details.module.css';
 import done from '../../images/done.png'
+import { useSelector } from 'react-redux';
 
-export default function OrderDetails({ orderId }) {
+export default function OrderDetails() {
+  const getOrderId = state => state.orderDetails.orderId;
+  const orderId = useSelector(getOrderId);
+
   return (
     <div className={ styles.container }>
       <p className={`${ styles.orderNumber } text text_type_digits-large pt-30`}>{orderId}</p>
