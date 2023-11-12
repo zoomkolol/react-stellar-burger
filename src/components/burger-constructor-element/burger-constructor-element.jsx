@@ -10,9 +10,9 @@ function BurgerConstructorElement({ ingredient, index }) {
   const dispatch = useDispatch();
   const ref = useRef(null);
 
-  const moveIngredient = useCallback((dragIndex, hoverIndex) => {
+  /*const moveIngredient = useCallback((dragIndex, hoverIndex) => {
     dispatch(sortIngredients({dragIndex, hoverIndex}));
-  }, [])
+  }, [])*/
 
   const [, drop] = useDrop({
     accept: 'ingredient',
@@ -40,9 +40,9 @@ function BurgerConstructorElement({ ingredient, index }) {
         return
       }
 
-      moveIngredient(dragIndex, hoverIndex);
+      dispatch(sortIngredients({dragIndex, hoverIndex}));
       item.index = hoverIndex;
-    }
+    },
   });
 
   const handleDelete = () => {

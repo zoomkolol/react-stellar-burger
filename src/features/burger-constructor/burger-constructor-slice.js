@@ -41,8 +41,7 @@ export const burgerConstructorSlice = createSlice({
       })
       .addCase(sortIngredients, (state, action) => {
         const { dragIndex, hoverIndex } = action.payload;
-
-        state.ingredients.splice(dragIndex, 0, state.ingredients.splice(hoverIndex, 1)[0]);
+        state.ingredients.splice(hoverIndex, 0, state.ingredients.splice(dragIndex, 1)[0]);
       })
       .addCase(resetConstructor, (state) => {
         state.bun = {}
