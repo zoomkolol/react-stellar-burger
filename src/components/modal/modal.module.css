@@ -27,13 +27,6 @@
   background: #1C1C21;
 }
 
-.title {
-  width: 640px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .closeIcon {
   position: absolute;
   top: 0;

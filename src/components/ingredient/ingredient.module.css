@@ -10,3 +10,8 @@
   display: flex;
   column-gap: 8px;
 }
+
+.link {
+  text-decoration: none;
+  color: white;
+}

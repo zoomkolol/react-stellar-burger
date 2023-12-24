@@ -28,9 +28,6 @@ function Modal( {children: child, title, onClose} ) {
       <div className={ styles.container }>
         <ModalOverlay onClick={onClose} />
         <div className={ styles.modal }>
-          <h2 className={ `${styles.title} text text_type_main-large pl-10 pt-10 pr-10` }>
-            {title}
-          </h2>
           <div className={`${ styles.closeIcon } mt-15 mr-10`}>
             <CloseIcon onClick={onClose} type="primary" />
           </div>

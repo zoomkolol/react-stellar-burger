@@ -58,12 +58,6 @@ function BurgerConstructor() {
     }
   }
 
-  const renderIng = useCallback((key, index, ingredient) => {
-    return (
-      <BurgerConstructorElement key={key} index={index} ingredient={ingredient} />
-    )
-  }, [])
-
   return (
     <div  ref={dropTarget} className={ `${styles.constructorContainer} pt-25 pl-4 pr-4` }>
       {(bun.name === undefined && ingredients.length === 0) && (
@@ -84,7 +78,7 @@ function BurgerConstructor() {
       {ingredients !== undefined && (
         <div className={ `${styles.elementList} custom-scroll` }>
           {ingredients.map((ingredient, index) => (
-            renderIng(ingredient.uniqueId, index, ingredient)
+            <BurgerConstructorElement key={ingredient.uniqueId} index={index} ingredient={ingredient} />
           ))}
         </div>
       )}
