@@ -14,6 +14,7 @@ import { ForgotPassPage } from "../pages/forgot-password/forgot-password";
 import { ResetPassPage } from "../pages/reset-password/reset-password";
 import { ProfilePage } from "../pages/profile/profile";
 import { OnlyAuth, OnlyUnAuth } from "../components/protected-route/protected-route";
+import { ROUTE_HOMEPAGE, ROUTE_404, ROUTE_FORGOT_PASSWORD, ROUTE_INGREDIENTS_ID, ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_REGISTER, ROUTE_RESET_PASSWORD, ROUTE } from "../common/utils/constants";
 
 function App() {
   const location = useLocation();
@@ -34,21 +35,21 @@ function App() {
     <div id="app" className={styles.app}>
       <AppHeader />
       <Routes location={background || location}>
-        <Route path="/" element={<HomePage />} />
-        <Route path='/ingredients/:ingredientId' element={<IngredientDetails />} />
-        <Route path="/profile" element={<OnlyAuth component={<ProfilePage/>} />} />
-        <Route path="/login" element={<OnlyUnAuth component={<LoginPage/>} />} />
-        <Route path="/register" element={<OnlyUnAuth component={<RegisterPage/>} />} />
-        <Route path="/forgot-password" element={<OnlyUnAuth component={<ForgotPassPage/>} />} />
-        <Route path="/reset-password" element={<OnlyUnAuth component={<ResetPassPage/>} />} />
-        <Route path="*" element={<p className="text text_type_main-large">Страница не найдена</p>} />
+        <Route path={ROUTE_HOMEPAGE} element={<HomePage />} />
+        <Route path={ROUTE_INGREDIENTS_ID} element={<IngredientDetails />} />
+        <Route path={ROUTE_PROFILE} element={<OnlyAuth component={<ProfilePage/>} />} />
+        <Route path={ROUTE_LOGIN} element={<OnlyUnAuth component={<LoginPage/>} />} />
+        <Route path={ROUTE_REGISTER} element={<OnlyUnAuth component={<RegisterPage/>} />} />
+        <Route path={ROUTE_FORGOT_PASSWORD} element={<OnlyUnAuth component={<ForgotPassPage/>} />} />
+        <Route path={ROUTE_RESET_PASSWORD} element={<OnlyUnAuth component={<ResetPassPage/>} />} />
+        <Route path={ROUTE_404} element={<p className="text text_type_main-large">Страница не найдена</p>} />
       </Routes>
     </div>
 
     {background && (
         <Routes>
 	        <Route
-	          path='/ingredients/:ingredientId'
+	          path={ROUTE_INGREDIENTS_ID}
 	          element={
 	            <Modal onClose={handleModalClose} title='Детали ингридиента'>
 	              <IngredientDetails modal={true} />

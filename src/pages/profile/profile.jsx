@@ -1,39 +1,29 @@
 import { NavLink } from 'react-router-dom';
 import styles from './profile.module.css';
 import { Typography, Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, updateUser } from '../../common/services/action';
-
-//TODO: доделать ивент onBlur, вынести в отдельную функцию, добавить сброс value до стейта
+import { useForm } from '../../common/hooks/useForm';
 
 export function ProfilePage() {
   const dispatch = useDispatch();
-
   const user = useSelector((store) => store.user.user);
   const inputRef = useRef(null);
-
   const [isDisabled, setIsDisabled] = useState(true);
+
+  const initialValues = {
+    name: user.name,
+    email: user.email,
+    password: ''
+  }
+
+  const {values, handleChange, setValues} = useForm(initialValues);
 
   const onIconClick = () => {
     setIsDisabled(false);
     setTimeout(() => inputRef.current.focus(), 0)
   }
-
-  const [email, setEmail] = useState(user.email);
-  const onChangeEmail = e => {
-    setEmail(e.target.value)
-  };
-
-  const [password , setPassword] = useState('');
-  const onChangePassword = e => {
-    setPassword(e.target.value)
-  };
-
-  const [name , setName] = useState(user.name);
-  const onChangeName = e => {
-    setName(e.target.value)
-  };
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -41,14 +31,12 @@ export function ProfilePage() {
   }
 
   const resetForm = () => {
-    setEmail(user.email);
-    setPassword('');
-    setName(user.name);
+    setValues(initialValues);
   }
 
   const submitForm = (e) => {
     e.preventDefault();
-    dispatch(updateUser(email, name));
+    dispatch(updateUser(values.email, values.name, values.password));
   }
 
   return (
@@ -82,8 +70,8 @@ export function ProfilePage() {
         <Input
           type={'text'}
           placeholder={'Имя'}
-          onChange={onChangeName}
-          value={name}
+          onChange={handleChange}
+          value={values.name}
           name={'name'}
           extraClass="pt-6"
           icon="EditIcon"
@@ -94,16 +82,16 @@ export function ProfilePage() {
           onBlur={() => setIsDisabled(true)}
         />
         <EmailInput
-          onChange={onChangeEmail}
-          value={email}
+          onChange={handleChange}
+          value={values.email}
           placeholder={'Логин'}
           name={'email'}
           isIcon={true}
           extraClass="pt-6"
         />
         <PasswordInput
-          onChange={onChangePassword}
-          value={password}
+          onChange={handleChange}
+          value={values.password}
           name={'password'}
           icon="EditIcon"
           extraClass="pt-6 pb-6"

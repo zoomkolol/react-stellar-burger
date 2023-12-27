@@ -10,6 +10,8 @@ import { resetConstructor } from './burger-constructor-slice';
 import { getOrderDetailsAsync } from '../order-details/order-details-slice';
 import { useDrop } from 'react-dnd';
 import { addIngredient, addBun } from './burger-constructor-slice';
+import { useNavigate } from 'react-router-dom';
+import { ROUTE_LOGIN } from '../../common/utils/constants';
 
 
 function BurgerConstructor() {
@@ -23,6 +25,10 @@ function BurgerConstructor() {
   const ingredientPrice = useSelector(getIngredientsPrice);
   const dispatch = useDispatch();
 
+  const getUser = state => state.user.user;
+  const user = useSelector(getUser);
+
+  const navigate = useNavigate();
 
   const [, dropTarget] = useDrop({
     accept: 'ingredientToConstructor',
@@ -100,7 +106,11 @@ function BurgerConstructor() {
           <CurrencyIcon type="primary" />
         </div>
         <Button onClick={() => {
-          placeOrder(getIngredientsIdArr())
+          if(user === null) {
+            navigate(ROUTE_LOGIN);
+          } else {
+            placeOrder(getIngredientsIdArr())
+          }
         }} htmlType="button" type="primary" size="medium">
           Оформить заказ
         </Button>

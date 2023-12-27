@@ -1,10 +1,11 @@
 import request from "../utils/request";
 import checkResponse from "../utils/check-response";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/constants";
 
 const config ={
   headers: {
     "Content-Type": "application/json",
-    authorization: localStorage.getItem('accessToken')
+    authorization: localStorage.getItem(ACCESS_TOKEN)
   },
 }
 
@@ -75,16 +76,25 @@ export const refreshToken = () => {
       "Content-Type": "application/json;charset=utf-8",
     },
     body: JSON.stringify({
-      token: localStorage.getItem("refreshToken"),
+      token: localStorage.getItem(REFRESH_TOKEN),
     })
   }
 
   return request('/auth/token', settings);
 };
 
-export const fetchWithRefresh = async (url, options) => {
+export const fetchWithRefresh = async (url, email, name, password) => {
   try {
-    const res = await fetch(url, options);
+    const res = await fetch(url,
+      {
+      method: 'PATCH',
+      headers: config.headers,
+      body: JSON.stringify({
+        'email': email,
+        'name': name,
+        'password': password
+      })
+    });
     return await checkResponse(res);
   } catch (err) {
     if (err.message === "jwt expired") {
@@ -92,10 +102,18 @@ export const fetchWithRefresh = async (url, options) => {
       if (!refreshData.success) {
         return Promise.reject(refreshData);
       }
-      localStorage.setItem("refreshToken", refreshData.refreshToken);
-      localStorage.setItem("accessToken", refreshData.accessToken/*.split(' ')[1]*/);
-      options.headers.authorization = refreshData.accessToken;
-      const res = await fetch(url, options);
+      localStorage.setItem(REFRESH_TOKEN, refreshData.refreshToken);
+      localStorage.setItem(ACCESS_TOKEN, refreshData.accessToken);
+      config.headers.authorization = refreshData.accessToken;
+      const res = await fetch(url, {
+        method: 'PATCH',
+        headers: config.headers,
+        body: JSON.stringify({
+          'email': email,
+          'name': name,
+          'password': password
+        })
+      });
       return await checkResponse(res);
     } else {
       return Promise.reject(err);
@@ -107,19 +125,6 @@ export const getUser = () => {
   const settings = {
     method: 'GET',
     headers: config.headers
-  }
-
-  return request('/auth/user', settings);
-}
-
-export const updateUser = (email, name) => {
-  const settings = {
-    method: 'PATCH',
-    headers: config.headers,
-    body: JSON.stringify({
-      'email': email,
-      'name': name,
-    })
   }
 
   return request('/auth/user', settings);
@@ -143,7 +148,7 @@ export const logout = () => {
     method: 'POST',
     headers: config.headers,
     body: JSON.stringify({
-      'token': localStorage.getItem("refreshToken")
+      'token': localStorage.getItem(REFRESH_TOKEN)
     })
   }
 

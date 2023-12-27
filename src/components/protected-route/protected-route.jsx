@@ -27,7 +27,6 @@ const Protected = ({ onlyUnAuth = false, component }) => {
     // Делаем редирект на главную страницу или на тот адрес, что записан в location.state.from
     const { from } = location.state || { from: { pathname: "/" } };
     return <Navigate to={from} />;
-    /*return <Navigate to='/' />;*/
   }
 
   if (!onlyUnAuth && !user) {

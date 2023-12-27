@@ -1,43 +1,45 @@
 import { Typography, EmailInput, PasswordInput, Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useState } from 'react';
 import styles from './reset-password.module.css';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { resetPassword } from '../../common/services/api';
+import { useForm } from '../../common/hooks/useForm';
+import { ROUTE_HOMEPAGE } from '../../common/utils/constants';
 
 export function ResetPassPage() {
+  const passwordChangeRequest = localStorage.getItem("passwordChangeRequest");
+  const navigate = useNavigate();
 
-  const [password , setPassword] = useState('');
-  const onChangePassword = e => {
-    setPassword(e.target.value)
-  };
-
-  const [token , setToken] = useState('');
-  const onChangeToken = e => {
-    setToken(e.target.value)
-  };
+  const {values, handleChange, setValues} = useForm({
+    password: '',
+    token: ''
+  });
 
   const onClick = () => {
-    resetPassword(password, token)
-    .then(localStorage.removeItem("passwordChangeRequest"))
+    resetPassword(values.password, values.token)
+    .then(() => {
+      localStorage.removeItem("passwordChangeRequest");
+      navigate(ROUTE_HOMEPAGE, { replace: true });
+    })
   }
 
   return (
     <>
-    {localStorage.getItem("passwordChangeRequest") !== null ? (
+    {passwordChangeRequest === "true" ? (
       <div className={ styles.container }>
       <p className="text text_type_main-medium">Восстановление пароля</p>
       <PasswordInput
-        onChange={onChangePassword}
+        onChange={handleChange}
         placeholder='Введите новый пароль'
-        value={password}
+        value={values.password}
         name={'password'}
         extraClass="pt-6"
       />
       <Input
       type={'text'}
       placeholder={'Введите код из письма'}
-      onChange={onChangeToken}
-      value={token}
+      onChange={handleChange}
+      value={values.token}
       name={'token'}
       extraClass="pt-6"
       />

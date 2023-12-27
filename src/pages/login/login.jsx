@@ -4,24 +4,20 @@ import styles from './login.module.css';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../../common/services/action';
+import { useForm } from '../../common/hooks/useForm';
 
 export function LoginPage() {
   const dispatch = useDispatch();
 
+  const {values, handleChange, setValues} = useForm({
+    email: '',
+    password: ''
+  });
+
   const formLogin = (e) => {
     e.preventDefault();
-    dispatch(login({email, password}));
+    dispatch(login({email: values.email, password: values.password}));
   }
-
-  const [email, setEmail] = useState('');
-  const onChangeEmail = e => {
-    setEmail(e.target.value)
-  };
-
-  const [password , setPassword] = useState('');
-  const onChangePassword = e => {
-    setPassword(e.target.value)
-  };
 
   return (
     <>
@@ -29,15 +25,15 @@ export function LoginPage() {
       <div className={ styles.container }>
         <p className="text text_type_main-medium">Вход</p>
         <EmailInput
-          onChange={onChangeEmail}
-          value={email}
+          onChange={handleChange}
+          value={values.email}
           name={'email'}
           isIcon={false}
           extraClass="pt-6"
         />
         <PasswordInput
-          onChange={onChangePassword}
-          value={password}
+          onChange={handleChange}
+          value={values.password}
           name={'password'}
           extraClass="pt-6"
         />

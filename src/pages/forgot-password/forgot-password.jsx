@@ -1,18 +1,22 @@
 import { Typography, EmailInput, PasswordInput, Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState } from 'react';
 import styles from './forgot-password.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { forgotPassword } from '../../common/services/api';
+import { useForm } from '../../common/hooks/useForm';
+import { ROUTE_RESET_PASSWORD } from '../../common/utils/constants';
 
 export function ForgotPassPage() {
-  const [email, setEmail] = useState('');
-  const onChangeEmail = e => {
-    setEmail(e.target.value)
-  };
+  const navigate = useNavigate();
 
-  const onSubmit = () => {
-    forgotPassword(email)
-    .then(localStorage.setItem("passwordChangeRequest", true));
+  const {values, handleChange, setValues} = useForm({email: ''});
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    forgotPassword(values.email)
+    .then(() => {
+      localStorage.setItem("passwordChangeRequest", true);
+      navigate(ROUTE_RESET_PASSWORD, { replace: true });
+    })
   }
 
   return (
@@ -21,8 +25,8 @@ export function ForgotPassPage() {
       <p className="text text_type_main-medium">Восстановление пароля</p>
       <form onSubmit={onSubmit} className={ styles.form__container }>
         <EmailInput
-          onChange={onChangeEmail}
-          value={email}
+          onChange={handleChange}
+          value={values.email}
           name={'email'}
           isIcon={false}
           extraClass="pt-6"
