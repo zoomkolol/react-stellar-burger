@@ -1,17 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import Ingredient from '../../components/ingredient/ingredient';
-import Modal from '../../components/modal/modal';
 import { Tab, Box, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import { useModal } from '../../common/hooks/useModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchIngredientsAsync } from './burger-ingredients-slice';
-import { addIngredientDetails, deleteIngredientDetails } from '../ingredient-details/ingredient-details-slice';
+import { addIngredientDetails } from '../ingredient-details/ingredient-details-slice';
 
 function BurgerIngredients() {
   const [currentTab, setCurrentTab] = React.useState('Булки');
-  const { isModalOpen, openModal, closeModal } = useModal();
   const getIngredients = state => state.burgerIngredients.ingredients;
   const ingredients = useSelector(getIngredients);
   const dispatch = useDispatch();
@@ -21,10 +16,6 @@ function BurgerIngredients() {
   const headingBunsRef = useRef();
   const headingSaucesRef = useRef();
   const headingFillingsRef = useRef();
-
-  useEffect(() => {
-    dispatch(fetchIngredientsAsync());
-  }, [dispatch]);
 
   const getDistanceBetween = () => {
     const calculateDistanceBetween = (tabsContainer, element) => {
@@ -58,16 +49,6 @@ function BurgerIngredients() {
     document.querySelector('#container').addEventListener('scroll', getDistanceBetween);
   }, [])
 
-  function handleOpenModal(ingredient) {
-    dispatch(addIngredientDetails(ingredient));
-    openModal();
-  }
-
-  function handleCloseModal() {
-    dispatch(deleteIngredientDetails());
-    closeModal();
-  }
-
   return (
     <section className={ `${styles.burgerIngredients} pr-10` }>
       <h1 className="text text_type_main-large pt-10 pb-5">Соберите бургер</h1>
@@ -90,7 +71,7 @@ function BurgerIngredients() {
 
             return(
             <Ingredient onClick={() => {
-              handleOpenModal(ingredient);
+              dispatch(addIngredientDetails(ingredient));
             }}
             key={ingredient._id} ingredient={ingredient} />)
           })}
@@ -101,7 +82,7 @@ function BurgerIngredients() {
             if(ingredient.type !== 'sauce') return null;
 
             return (<Ingredient onClick={() => {
-              handleOpenModal(ingredient);
+              dispatch(addIngredientDetails(ingredient));
             }}
             key={ingredient._id} ingredient={ingredient}/>
           )})}
@@ -112,17 +93,12 @@ function BurgerIngredients() {
             if(ingredient.type !== 'main') return null;
 
             return (<Ingredient onClick={() => {
-              handleOpenModal(ingredient);
+              dispatch(addIngredientDetails(ingredient));
             }}
             key={ingredient._id} ingredient={ingredient}/>
           )})}
         </ul>
       </div>
-      {isModalOpen &&
-        <Modal onClose={handleCloseModal} title='Детали ингридиента'>
-          <IngredientDetails />
-        </Modal>
-      }
     </section>
   );
 }

@@ -13,3 +13,17 @@
   composes: container;
   row-gap: 8px;
 }
+
+.title {
+  width: 640px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title_full {
+  composes: title;
+  justify-content: center;
+  align-items: center;
+  padding-top: 120px;
+  padding-right: 40px;
+}

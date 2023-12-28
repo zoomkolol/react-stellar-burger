@@ -1,0 +1,7 @@
+.burgerConstructor {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  max-height: 100vh;
+  overflow: hidden;
+}

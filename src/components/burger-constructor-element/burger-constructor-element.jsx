@@ -10,10 +10,6 @@ function BurgerConstructorElement({ ingredient, index }) {
   const dispatch = useDispatch();
   const ref = useRef(null);
 
-  /*const moveIngredient = useCallback((dragIndex, hoverIndex) => {
-    dispatch(sortIngredients({dragIndex, hoverIndex}));
-  }, [])*/
-
   const [, drop] = useDrop({
     accept: 'ingredient',
     hover: (item, monitor) => {
@@ -39,9 +35,9 @@ function BurgerConstructorElement({ ingredient, index }) {
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return
       }
-
-      dispatch(sortIngredients({dragIndex, hoverIndex}));
       item.index = hoverIndex;
+      dispatch(sortIngredients({dragIndex, hoverIndex}));
+
     },
   });
 
@@ -49,13 +45,13 @@ function BurgerConstructorElement({ ingredient, index }) {
     dispatch(deleteIngredient(ingredient));
   }
 
-  const [{ isDragging }, drag] = useDrag(() => ({
+  const [{ isDragging }, drag] = useDrag({
     type: 'ingredient',
     item: { ingredient, index },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-  }));
+  });
   const opacity = isDragging ? 0 : 1
   drag(drop(ref));
 

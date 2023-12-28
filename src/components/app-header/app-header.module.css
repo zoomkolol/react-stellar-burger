@@ -5,6 +5,7 @@
   justify-content: center;
   padding: 16px 0px;
   background: #1C1C21;
+  box-sizing: border-box;
 }
 
 .container {
@@ -36,6 +37,8 @@
 .navLinkContainer {
   display: flex;
   flex-wrap: wrap;
+  text-decoration: none;
+  color: white;
 }
 
 .logo {
