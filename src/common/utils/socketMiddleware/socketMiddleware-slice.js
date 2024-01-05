@@ -1,20 +1,34 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice } from "@reduxjs/toolkit";
+import { WS_CONNECTION_CLOSED, WS_CONNECTION_START } from "./socketMiddleware-action-types";
 
 const initialState = {
-  url: '',
-  connectionType: ''
+  wsConnected: false,
+  message: []
 }
+
+export const wsConnectionStart = createAction(WS_CONNECTION_START);
+export const wsConnectionClosed = createAction(WS_CONNECTION_CLOSED);
+
 
 const webSokcetSlice = createSlice({
   name: 'websocket',
   initialState: initialState,
   reducers: {
-    addInfo: (state, action) => {
-      return action.payload;
+    wsConnectionSuccess: (state) => {
+      state.wsConnected = true;
+    },
+    wsConnectionError: (state) => {
+      state.wsConnected = false;
+    },
+    wsConnectionClosed: (state) => {
+      state.wsConnected = false;
+    },
+    wsGetMessage: (state, action) => {
+      state.message = action.payload;
     }
   }
 })
 
-export const {addInfo} = webSokcetSlice.actions;
+export const {wsConnectionSuccess, wsConnectionError, wsGetMessage} = webSokcetSlice.actions;
 
 export default webSokcetSlice.reducer;

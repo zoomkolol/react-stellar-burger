@@ -2,22 +2,24 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styles from './profile-feed-orders.module.css';
 import { ProfileOrder } from "../../features/profile-order/profile-order";
-import { connectUserWebSocket, disconnectWebsocket } from "../../common/utils/socketMiddleware/socketMiddleware-actions";
-import { USER_WSS } from "../../common/utils/constants";
+import { ACCESS_TOKEN, WSS_URL } from "../../common/utils/constants";
+import { wsConnectionClosed, wsConnectionStart } from "../../common/utils/socketMiddleware/socketMiddleware-slice";
 
 
 export function ProfileFeedOrders() {
   const dispatch = useDispatch();
-  const getOrders = store => store.profileOrder.orders;
+  const getOrders = store => store.websocket.message.orders;
   const orders = useSelector(getOrders);
 
   useEffect(() => {
-    dispatch(connectUserWebSocket({url: USER_WSS}));
+    const accessToken = localStorage.getItem(ACCESS_TOKEN);
+    dispatch(wsConnectionStart({wsUrl: WSS_URL + `?token=${accessToken.replace("Bearer ", "")}`}));
 
     return () => {
-      dispatch(disconnectWebsocket());
+      dispatch(wsConnectionClosed());
     }
-  }, [dispatch])
+
+  }, [])
 
   return (
     <>

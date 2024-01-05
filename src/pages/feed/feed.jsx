@@ -3,13 +3,13 @@ import styles from "./feed.module.css";
 import { Box, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useEffect } from "react";
 import { CardOrder } from "../../features/card-order/card-order";
-import { connectWebSocket, disconnectWebsocket } from "../../common/utils/socketMiddleware/socketMiddleware-actions";
-import { ALL_WSS } from "../../common/utils/constants";
+import { wsConnectionClosed, wsConnectionStart } from "../../common/utils/socketMiddleware/socketMiddleware-slice";
+import { WSS_URL } from "../../common/utils/constants";
 
 //Вынести контейнер со списком в отдельный компонент?
 export function FeedPage() {
-  const getOrdersInfo = store => store.cardOrder;
-  const getOrders = store => store.cardOrder.orders;
+  const getOrdersInfo = store => store.websocket.message;
+  const getOrders = store => store.websocket.message.orders;
   const orders = useSelector(getOrders);
   const totalInfo = useSelector(getOrdersInfo);
 
@@ -19,12 +19,12 @@ export function FeedPage() {
   const processOrders = orders ? orders.filter(order => order.status === "pending").slice(0, 10) : '';
 
   useEffect(() => {
-    dispatch(connectWebSocket({url: ALL_WSS}));
+    dispatch(wsConnectionStart({wsUrl: WSS_URL + '/all'}));
 
     return () => {
-      dispatch(disconnectWebsocket());
+      dispatch(wsConnectionClosed());
     }
-  }, [dispatch])
+  }, [])
 
   return (
     <>

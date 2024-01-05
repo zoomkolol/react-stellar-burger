@@ -1,4 +1,66 @@
-import { updateCardOrder } from "../../../features/card-order/card-order-slice";
+import { WS_CONNECTION_CLOSED, WS_CONNECTION_START, WS_SEND_MESSAGE } from "./socketMiddleware-action-types";
+import { wsConnectionClosed, wsConnectionError, wsConnectionSuccess, wsGetMessage } from "./socketMiddleware-slice";
+
+const socketMiddleware = () => {
+    return store => {
+        let socket = null;
+
+    return next => action => {
+      const { dispatch, getState } = store;
+      const { type, payload } = action;
+
+      if (type === WS_CONNECTION_START) {
+            // объект класса WebSocket
+        const wsUrl = payload.wsUrl;
+        socket = new WebSocket(wsUrl);
+        console.log('new connection')
+      }
+      if (socket) {
+
+                // функция, которая вызывается при открытии сокета
+        socket.onopen = event => {
+          dispatch(wsConnectionSuccess());
+          console.log(event);
+        };
+
+                // функция, которая вызывается при ошибке соединения
+        socket.onerror = event => {
+          dispatch(wsConnectionError());
+          socket = null;
+          console.log(event);
+        };
+
+                // функция, которая вызывается при получении события от сервера
+        socket.onmessage = event => {
+          const data = JSON.parse(event.data);
+          console.log(data);
+          dispatch(wsGetMessage(data));
+        };
+                // функция, которая вызывается при закрытии соединения
+        socket.onclose = event => {
+          dispatch(wsConnectionClosed());
+          console.log(event);
+        };
+
+        if (type === WS_CONNECTION_CLOSED) {
+          socket.close();
+        }
+
+        if (type === WS_SEND_MESSAGE) {
+          const message = payload;
+                    // функция для отправки сообщения на сервер
+          socket.send(JSON.stringify(message));
+        }
+      }
+
+      next(action);
+    };
+    };
+};
+
+export default socketMiddleware;
+
+/*import { updateCardOrder } from "../../../features/card-order/card-order-slice";
 import { updateProfileOrder } from "../../../features/profile-order/profile-order-slice";
 import { refreshAuthToken } from "../../services/api";
 import { ACCESS_TOKEN, CONNECT_USER_WEBSOCKET, CONNECT_WEBSOCKET, DISCONNECT_WEBSOCKET } from "../constants";
@@ -86,3 +148,4 @@ const socketMiddleware = store => {
 }
 
 export default socketMiddleware;
+*/

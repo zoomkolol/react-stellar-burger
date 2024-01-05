@@ -1,6 +1,5 @@
 export const BASE_URL = 'https://norma.nomoreparties.space/api';
-export const ALL_WSS = 'wss://norma.nomoreparties.space/orders/all';
-export const USER_WSS = 'wss://norma.nomoreparties.space/orders';
+export const WSS_URL = 'wss://norma.nomoreparties.space/orders';
 
 export const ACCESS_TOKEN = "accessToken";
 export const REFRESH_TOKEN = "refreshToken";
@@ -19,8 +18,3 @@ export const ROUTE_REGISTER = "/register";
 export const ROUTE_FORGOT_PASSWORD = "/forgot-password";
 export const ROUTE_RESET_PASSWORD = "/reset-password";
 export const ROUTE_404 = "*";
-
-
-export const CONNECT_WEBSOCKET = 'CONNECT_WEBSOCKET';
-export const CONNECT_USER_WEBSOCKET = 'CONNECT_USER_WEBSOCKET';
-export const DISCONNECT_WEBSOCKET = 'DISCONNECT_WEBSOCKET';
