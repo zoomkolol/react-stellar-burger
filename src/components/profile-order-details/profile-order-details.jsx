@@ -1,20 +1,16 @@
 import styles from './profile-order-details.module.css'
 import { Typography, FormattedDate, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { closeWebSocket, webSocket } from '../../common/utils/socketMiddleware';
-import { USER, USER_WSS } from '../../common/utils/constants';
+import { getOrderInfoFromNumber } from '../../common/services/api';
 
-
+//TODO: Вынести селекторы в отдельный файл
 export default function ProfileOrderDetails({modal = false}) {
-  const dispatch = useDispatch();
-
   const orderNumber = useParams().number;
   const getOrderInfo = state => state.profileOrder.orders;
   const orderInfo = useSelector(getOrderInfo);
-
-  const order = orderInfo.find(element => element.number === parseInt(orderNumber));
+  const [order, setOrder] = useState();
 
   const getIngredientsData = store => store.burgerIngredients.ingredients;
   const ingredientsData = useSelector(getIngredientsData);
@@ -55,13 +51,14 @@ export default function ProfileOrderDetails({modal = false}) {
 
   useEffect(() => {
     setTotalPrice(orderIngredientsWithFullInfo.reduce((current, element) => current + element.price, 0));
+    setOrder(orderInfo.find(element => element.number === parseInt(orderNumber)));
     if(!modal) {
-      webSocket(dispatch, USER_WSS, USER);
-
-      return () => {
-        closeWebSocket("1000", "CardOrderDetailsPage was unmounted");
-      }
+      getOrderInfoFromNumber(orderNumber).then(function(result){
+        setOrder(result.orders[0]);
+      })
     }
+
+
 
   }, [])
 

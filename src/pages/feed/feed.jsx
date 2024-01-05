@@ -2,9 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./feed.module.css";
 import { Box, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useEffect } from "react";
-import { webSocket, closeWebSocket } from "../../common/utils/socketMiddleware";
-import { ALL, ALL_WSS } from "../../common/utils/constants";
 import { CardOrder } from "../../features/card-order/card-order";
+import { connectWebSocket, disconnectWebsocket } from "../../common/utils/socketMiddleware/socketMiddleware-actions";
+import { ALL_WSS } from "../../common/utils/constants";
 
 //Вынести контейнер со списком в отдельный компонент?
 export function FeedPage() {
@@ -15,16 +15,16 @@ export function FeedPage() {
 
   const dispatch = useDispatch();
 
-  const doneOrders = orders.filter(order => order.status === "done").slice(0, 10);
-  const processOrders = orders.filter(order => order.status === "pending").slice(0, 10);
+  const doneOrders = orders ? orders.filter(order => order.status === "done").slice(0, 10) : '';
+  const processOrders = orders ? orders.filter(order => order.status === "pending").slice(0, 10) : '';
 
   useEffect(() => {
-    webSocket(dispatch, ALL_WSS, ALL);
+    dispatch(connectWebSocket({url: ALL_WSS}));
 
     return () => {
-      closeWebSocket("1000", "Feedpage was unmounted");
+      dispatch(disconnectWebsocket());
     }
-  }, [])
+  }, [dispatch])
 
   return (
     <>
@@ -33,7 +33,7 @@ export function FeedPage() {
         <div className={styles.container}>
           <div className={`${styles.feed__container} mr-15 custom-scroll`}>
             <ul className={styles.orders}>
-              {orders.map((order) => {
+              {orders && orders.map((order) => {
                 return (
                   <CardOrder key={order._id} order={order}/>
                 )
@@ -45,7 +45,7 @@ export function FeedPage() {
               <div className={`${styles.orders__container} mr-9`}>
               <p className="text text_type_main-medium mb-6">Готовы:</p>
                 <ul className={styles.list}>
-                  {doneOrders.map((order, index) => {
+                  {doneOrders && doneOrders.map((order, index) => {
                     return <li key={index}><p className={`${styles.list__element_done} text text_type_digits-default pb-2`}>{order.number}</p></li>
                   })}
                 </ul>
@@ -53,7 +53,7 @@ export function FeedPage() {
               <div className={styles.orders__container}>
                 <p className="text text_type_main-medium mb-6">В работе:</p>
                 <ul className={styles.list}>
-                  {processOrders.map((order, index) => {
+                  {processOrders && processOrders.map((order, index) => {
                     return <li key={index}><p className="text text_type_digits-default pb-2">{order.number}</p></li>
                   })}
                 </ul>

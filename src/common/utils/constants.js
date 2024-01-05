@@ -21,5 +21,6 @@ export const ROUTE_RESET_PASSWORD = "/reset-password";
 export const ROUTE_404 = "*";
 
 
-export const ALL = "all";
-export const USER = "user";
+export const CONNECT_WEBSOCKET = 'CONNECT_WEBSOCKET';
+export const CONNECT_USER_WEBSOCKET = 'CONNECT_USER_WEBSOCKET';
+export const DISCONNECT_WEBSOCKET = 'DISCONNECT_WEBSOCKET';

@@ -18,6 +18,29 @@ export function fetchIngredients() {
   return request('/ingredients', settings)
 };
 
+export const getOrderInfoFromNumber = async (number) => {
+  try {
+    const res = await fetch(BASE_URL + `/orders/${number}`,
+      {
+      method: 'GET',
+      headers: config.headers,
+    });
+    return await checkResponse(res);
+  } catch (err) {
+    if (err === "Ошибка 403") {
+      refreshAuthToken();
+      const res = await fetch(BASE_URL + `/orders/${number}`, {
+        method: 'GET',
+        headers: config.headers,
+      });
+      return await checkResponse(res);
+    } else {
+      return Promise.reject(err);
+    }
+  }
+};
+
+
 export const getOrderDetails = async (ingredients) => {
   try {
     const res = await fetch(BASE_URL + '/orders',
@@ -30,8 +53,7 @@ export const getOrderDetails = async (ingredients) => {
     });
     return await checkResponse(res);
   } catch (err) {
-    if (err.message === "jwt expired") {
-      const refreshData = await refreshToken();
+    if (err === "Ошибка 403") {
       refreshAuthToken();
       const res = await fetch(BASE_URL + '/orders', {
         method: 'PATCH',
@@ -124,7 +146,7 @@ export const fetchWithRefresh = async (url, email, name, password) => {
     });
     return await checkResponse(res);
   } catch (err) {
-    if (err.message === "jwt expired") {
+    if (err === "Ошибка 403") {
       refreshAuthToken();
       const res = await fetch(url, {
         method: 'PATCH',

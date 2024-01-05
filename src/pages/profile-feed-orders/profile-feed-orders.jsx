@@ -1,9 +1,9 @@
 import { useEffect } from "react"
-import { closeWebSocket, webSocket } from "../../common/utils/socketMiddleware"
 import { useDispatch, useSelector } from "react-redux"
-import { USER, USER_WSS } from "../../common/utils/constants";
 import styles from './profile-feed-orders.module.css';
 import { ProfileOrder } from "../../features/profile-order/profile-order";
+import { connectUserWebSocket, disconnectWebsocket } from "../../common/utils/socketMiddleware/socketMiddleware-actions";
+import { USER_WSS } from "../../common/utils/constants";
 
 
 export function ProfileFeedOrders() {
@@ -12,12 +12,12 @@ export function ProfileFeedOrders() {
   const orders = useSelector(getOrders);
 
   useEffect(() => {
-    webSocket(dispatch, USER_WSS, USER);
+    dispatch(connectUserWebSocket({url: USER_WSS}));
 
     return () => {
-      closeWebSocket("1000", "ProfileFeed was unmounted");
+      dispatch(disconnectWebsocket());
     }
-  }, [])
+  }, [dispatch])
 
   return (
     <>
