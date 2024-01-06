@@ -8,8 +8,6 @@ import { getOrderInfoFromNumber } from '../../common/services/api';
 //TODO: Вынести селекторы в отдельный файл
 export default function CardOrderDetails({modal = false}) {
   const orderNumber = useParams().number;
-  const getOrderInfo = state => state.websocket.message.orders;
-  const orderInfo = useSelector(getOrderInfo);
   const [order, setOrder] = useState();
 
   const getIngredientsData = store => store.burgerIngredients.ingredients;
@@ -51,12 +49,9 @@ export default function CardOrderDetails({modal = false}) {
 
   useEffect(() => {
     setTotalPrice(orderIngredientsWithFullInfo.reduce((current, element) => current + element.price, 0));
-    setOrder(orderInfo && orderInfo.find(element => element.number === parseInt(orderNumber)));
-    if(!modal) {
-      getOrderInfoFromNumber(orderNumber).then(function(result){
-        setOrder(result.orders[0]);
-      })
-    }
+    getOrderInfoFromNumber(orderNumber).then(function(result){
+      setOrder(result.orders[0]);
+    })
 
   }, [])
 
