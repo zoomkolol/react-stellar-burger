@@ -18,7 +18,6 @@ const Protected = ({ onlyUnAuth = false, component }) => {
     // Выводим прелоадер в ПР
     // Здесь возвращается просто null для экономии времени
     dispatch(checkUserAuth());
-    console.log(isAuthChecked)
     return <p className="text text_type_main-large">Загрузка...</p>;
   }
 
