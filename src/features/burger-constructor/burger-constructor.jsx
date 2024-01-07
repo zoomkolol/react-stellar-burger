@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import Modal from '../../components/modal/modal';
@@ -13,6 +13,8 @@ import { addIngredient, addBun } from './burger-constructor-slice';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE_LOGIN } from '../../common/utils/constants';
 
+
+//TODO: использование памяти? useEffect, чтобы при размонтировании страницы убирались все подписки?
 
 function BurgerConstructor() {
   const getBun = state => state.burgerConstructor.bun;
@@ -57,12 +59,26 @@ function BurgerConstructor() {
   const placeOrder = async (ingredientsIdArr) => {
     try {
       await dispatch(getOrderDetailsAsync(ingredientsIdArr));
-      dispatch(resetConstructor());
       openModal();
+      dispatch(resetConstructor());
     } catch (err) {
       console.log('Произошла ошибка: ' + err)
     }
   }
+
+  const [loadingOrder, setLoadingOrder] = useState();
+
+  useEffect(() => {
+    if(loadingOrder) {
+      const timeout = setTimeout(() => {
+        setLoadingOrder(null)
+      }, 15000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [loadingOrder])
+
+  const showLoadingText = () => setLoadingOrder("Создаём заказ");
 
   return (
     <div  ref={dropTarget} className={ `${styles.constructorContainer} pt-25 pl-4 pr-4` }>
@@ -105,15 +121,16 @@ function BurgerConstructor() {
           <p className="text text_type_digits-medium">{ bunPrice + ingredientPrice }</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button onClick={() => {
+        {loadingOrder ? loadingOrder :<Button onClick={() => {
           if(user === null) {
             navigate(ROUTE_LOGIN);
           } else {
+            showLoadingText();
             placeOrder(getIngredientsIdArr())
           }
         }} htmlType="button" type="primary" size="medium">
           Оформить заказ
-        </Button>
+        </Button>}
       </div>)}
       {isModalOpen &&
         <Modal onClose={closeModal}>

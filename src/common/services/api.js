@@ -1,6 +1,6 @@
 import request from "../utils/request";
 import checkResponse from "../utils/check-response";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/constants";
+import { ACCESS_TOKEN, BASE_URL, REFRESH_TOKEN } from "../utils/constants";
 
 const config ={
   headers: {
@@ -18,17 +18,56 @@ export function fetchIngredients() {
   return request('/ingredients', settings)
 };
 
-export const getOrderDetails = async (ingredients) => {
-  const settings = {
-    method: 'POST',
-    headers: config.headers,
-    body: JSON.stringify({
-      'ingredients': ingredients
-    })
+export const getOrderInfoFromNumber = async (number) => {
+  try {
+    const res = await fetch(BASE_URL + `/orders/${number}`,
+      {
+      method: 'GET',
+      headers: config.headers,
+    });
+    return await checkResponse(res);
+  } catch (err) {
+    if (err === "Ошибка 403") {
+      refreshAuthToken();
+      const res = await fetch(BASE_URL + `/orders/${number}`, {
+        method: 'GET',
+        headers: config.headers,
+      });
+      return await checkResponse(res);
+    } else {
+      return Promise.reject(err);
+    }
   }
+};
 
-  return request('/orders', settings);
-}
+
+export const getOrderDetails = async (ingredients) => {
+  try {
+    const res = await fetch(BASE_URL + '/orders',
+      {
+      method: 'POST',
+      headers: config.headers,
+      body: JSON.stringify({
+        'ingredients': ingredients
+      })
+    });
+    return await checkResponse(res);
+  } catch (err) {
+    if (err === "Ошибка 403") {
+      refreshAuthToken();
+      const res = await fetch(BASE_URL + '/orders', {
+        method: 'PATCH',
+        headers: config.headers,
+        body: JSON.stringify({
+          'ingredients': ingredients
+        })
+      });
+      return await checkResponse(res);
+    } else {
+      return Promise.reject(err);
+    }
+  }
+};
 
 export const forgotPassword = (email) => {
   const settings = {
@@ -83,6 +122,16 @@ export const refreshToken = () => {
   return request('/auth/token', settings);
 };
 
+export const refreshAuthToken = async() => {
+  const refreshData = await refreshToken();
+  if (!refreshData.success) {
+    return Promise.reject(refreshData);
+  }
+  localStorage.setItem(REFRESH_TOKEN, refreshData.refreshToken);
+  localStorage.setItem(ACCESS_TOKEN, refreshData.accessToken);
+  config.headers.authorization = refreshData.accessToken;
+}
+
 export const fetchWithRefresh = async (url, email, name, password) => {
   try {
     const res = await fetch(url,
@@ -97,14 +146,8 @@ export const fetchWithRefresh = async (url, email, name, password) => {
     });
     return await checkResponse(res);
   } catch (err) {
-    if (err.message === "jwt expired") {
-      const refreshData = await refreshToken();
-      if (!refreshData.success) {
-        return Promise.reject(refreshData);
-      }
-      localStorage.setItem(REFRESH_TOKEN, refreshData.refreshToken);
-      localStorage.setItem(ACCESS_TOKEN, refreshData.accessToken);
-      config.headers.authorization = refreshData.accessToken;
+    if (err === "Ошибка 403") {
+      refreshAuthToken();
       const res = await fetch(url, {
         method: 'PATCH',
         headers: config.headers,

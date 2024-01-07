@@ -1,6 +1,5 @@
 import styles from './ingredient-details.module.css';
 import { Typography } from '@ya.praktikum/react-developer-burger-ui-components'
-import { object } from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
