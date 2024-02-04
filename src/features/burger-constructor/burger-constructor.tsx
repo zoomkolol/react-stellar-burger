@@ -37,10 +37,6 @@ function BurgerConstructor() {
   const [, dropTarget] = useDrop({
     accept: 'ingredientToConstructor',
     drop(ingredient: TIngredient) {
-
-      console.log(ingredient);
-      console.log(ingredient.type);
-      console.log(ingredient.calories);
       if(ingredient.type === 'bun') {
         dispatch(addBun(ingredient))
       } else {
@@ -69,7 +65,6 @@ function BurgerConstructor() {
   }
 
   const placeOrder = async (ingredientsIdArr: string[]) => {
-    console.log('Ingredients are: ' + ingredientsIdArr);
     try {
       await dispatch(getOrderDetailsAsync(ingredientsIdArr));
       openModal();

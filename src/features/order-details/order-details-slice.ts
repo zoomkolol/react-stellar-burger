@@ -8,7 +8,7 @@ type OrderDetailsState = {
 
 const initialState: OrderDetailsState = {
   orderId: 0,
-  loading: true
+  loading: false
 }
 
 export const getOrderDetailsAsync = createAsyncThunk('order/getOrderDetails', async (ingredeintsArr: string[]) => {

@@ -9,6 +9,10 @@ const config = {
   },
 }
 
+const updateAuthToken = () => {
+  config.headers.authorization = localStorage.getItem(ACCESS_TOKEN) ?? '';
+}
+
 export function fetchIngredients() {
   const settings = {
     method: 'GET',
@@ -43,6 +47,7 @@ export const getOrderInfoFromNumber = async (number: string) => {
 
 export const getOrderDetails = async (ingredients: string[]) => {
   try {
+    updateAuthToken();
     const res = await fetch(BASE_URL + '/orders',
       {
       method: 'POST',

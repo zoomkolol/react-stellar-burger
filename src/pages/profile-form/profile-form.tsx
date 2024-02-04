@@ -8,7 +8,7 @@ import { RootState } from '../../app/store';
 
 export function ProfileFormPage() {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((store: RootState) => store.user.user);
+  const user = useAppSelector(store => store.user.user);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
