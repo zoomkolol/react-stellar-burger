@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 import { checkUserAuth } from "../../common/services/action";
 import { RootState } from "../../app/store";
-import { useAppDispatch } from "../../common/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../common/hooks/hooks";
 
 type Props = {
   onlyUnAuth?: boolean;
@@ -13,8 +12,8 @@ const Protected = ({ onlyUnAuth = false, component }: Props) => {
   // isAuthChecked это флаг, показывающий что проверка токена произведена
   // при этом результат этой проверки не имеет значения, важно только,
   // что сам факт проверки имел место.
-  const isAuthChecked = useSelector((store: RootState) => store.user.isAuthChecked);
-  const user = useSelector((store: RootState) => store.user.user);
+  const isAuthChecked = useAppSelector((store: RootState) => store.user.isAuthChecked);
+  const user = useAppSelector((store: RootState) => store.user.user);
   const location = useLocation();
   const dispatch = useAppDispatch();
 

@@ -1,13 +1,13 @@
 import styles from './ingredient-details.module.css';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { RootState } from '../../app/store';
+import { useAppSelector } from '../../common/hooks/hooks';
 
 
 export default function IngredientDetails({modal = false}) {
   const ingId = useParams().ingredientId;
   const getIngredient = (state: RootState) => state.burgerIngredients.ingredients;
-  const ingredients = useSelector(getIngredient);
+  const ingredients = useAppSelector(getIngredient);
   const ingredient = ingredients.find(element => element._id === ingId);
 
   if(!ingredient) {

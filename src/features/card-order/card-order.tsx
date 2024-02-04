@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux';
 import styles from './card-order.module.css';
 import { FormattedDate, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Order, TIngredient } from '../../common/types/types';
 import { RootState } from '../../app/store';
+import { useAppSelector } from '../../common/hooks/hooks';
 
 type Prop = {
   order: Order;
@@ -15,7 +15,7 @@ export function CardOrder({order}: Prop) {
   //TODO: убарть ререндер элемента
 
   const getIngredientsData = (store: RootState) => store.burgerIngredients.ingredients;
-  const ingredientsData = useSelector(getIngredientsData);
+  const ingredientsData = useAppSelector(getIngredientsData);
   const location = useLocation();
 
   const orderIngredientsWithFullInfo: TIngredient[] = [];

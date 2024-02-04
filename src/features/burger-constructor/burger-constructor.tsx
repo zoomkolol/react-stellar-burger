@@ -5,7 +5,6 @@ import Modal from '../../components/modal/modal';
 import BurgerConstructorElement from '../../components/burger-constructor-element/burger-constructor-element';
 import OrderDetails from '../order-details/order-details';
 import { useModal } from '../../common/hooks/useModal';
-import { useSelector } from 'react-redux';
 import { resetConstructor } from './burger-constructor-slice';
 import { getOrderDetailsAsync } from '../order-details/order-details-slice';
 import { useDrop } from 'react-dnd';
@@ -14,24 +13,24 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTE_LOGIN } from '../../common/utils/constants';
 import { RootState } from '../../app/store';
 import { TIngredient } from '../../common/types/types';
-import { useAppDispatch } from '../../common/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../common/hooks/hooks';
 
 
 //TODO: использование памяти? useEffect, чтобы при размонтировании страницы убирались все подписки?
 
 function BurgerConstructor() {
   const getBun = (state: RootState) => state.burgerConstructor.bun;
-  const bun = useSelector(getBun);
+  const bun = useAppSelector(getBun);
   const getIngredients = (state: RootState) => state.burgerConstructor.ingredients;
-  const ingredients = useSelector(getIngredients);
+  const ingredients = useAppSelector(getIngredients);
   const getBunPrice = (state: RootState) => state.burgerConstructor.bunPrice;
-  const bunPrice = useSelector(getBunPrice);
+  const bunPrice = useAppSelector(getBunPrice);
   const getIngredientsPrice = (state: RootState) => state.burgerConstructor.ingredientPrice;
-  const ingredientPrice = useSelector(getIngredientsPrice);
+  const ingredientPrice = useAppSelector(getIngredientsPrice);
   const dispatch = useAppDispatch();
 
   const getUser = (state: RootState) => state.user.user;
-  const user = useSelector(getUser);
+  const user = useAppSelector(getUser);
 
   const navigate = useNavigate();
 
@@ -70,6 +69,7 @@ function BurgerConstructor() {
   }
 
   const placeOrder = async (ingredientsIdArr: string[]) => {
+    console.log('Ingredients are: ' + ingredientsIdArr);
     try {
       await dispatch(getOrderDetailsAsync(ingredientsIdArr));
       openModal();

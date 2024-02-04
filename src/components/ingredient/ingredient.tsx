@@ -1,11 +1,10 @@
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient.module.css';
-import { MouseEvent } from 'react';
 import { useDrag } from 'react-dnd'
-import { useSelector } from "react-redux";
 import { useLocation, Link } from 'react-router-dom';
 import { TIngredient } from '../../common/types/types';
 import { RootState } from '../../app/store';
+import { useAppSelector } from '../../common/hooks/hooks';
 
 type Props = {
   onClick: () => void;
@@ -14,7 +13,7 @@ type Props = {
 
 function Ingredient({onClick, ingredient }: Props) {
   const getBurgerConstructorData = (state: RootState) => state.burgerConstructor;
-  const burgerConstructorData = useSelector(getBurgerConstructorData);
+  const burgerConstructorData = useAppSelector(getBurgerConstructorData);
   const location = useLocation();
   const ingredientId = ingredient['_id'];
 

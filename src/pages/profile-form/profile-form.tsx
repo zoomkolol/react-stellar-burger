@@ -1,15 +1,14 @@
-import { useSelector } from 'react-redux';
 import styles from './profile-form.module.css';
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FormEvent, useRef, useState } from 'react';
 import { useForm } from '../../common/hooks/useForm';
 import { updateUser } from '../../common/services/action';
-import { useAppDispatch } from '../../common/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../common/hooks/hooks';
 import { RootState } from '../../app/store';
 
 export function ProfileFormPage() {
   const dispatch = useAppDispatch();
-  const user = useSelector((store: RootState) => store.user.user);
+  const user = useAppSelector((store: RootState) => store.user.user);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
@@ -28,15 +27,16 @@ export function ProfileFormPage() {
 
   const resetForm = () => {
     setValues(initialValues);
+    console.log(values.email, values.name, values.password);
   }
 
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(values.email && values.name && values.password) {
-      dispatch(updateUser(values.email, values.name, values.password));
-    }
-
+    dispatch(updateUser(values.email ?? '', values.name ?? '', values.password ?? ''));
+    console.log(values.email, values.name, values.password);
   }
+
+
   return (
     <>
     <form className={ styles.profile__form } onSubmit={submitForm}>

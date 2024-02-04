@@ -4,7 +4,6 @@ import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { HomePage } from "../pages/home/home";
 import Modal from "../components/modal/modal";
 import IngredientDetails from "../features/ingredient-details/ingredient-details";
-import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchIngredientsAsync } from "../features/burger-ingredients/burger-ingredients-slice";
 import { LoginPage } from "../pages/login/login";
@@ -19,12 +18,13 @@ import CardOrderDetails from "../components/card-order-details/card-order-detail
 import { ProfileFormPage } from "../pages/profile-form/profile-form";
 import { ProfileFeedOrders } from "../pages/profile-feed-orders/profile-feed-orders";
 import ProfileOrderDetails from "../components/profile-order-details/profile-order-details";
+import { useAppDispatch } from "../common/hooks/hooks";
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const background = location.state && location.state.background;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchIngredientsAsync());

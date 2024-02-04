@@ -3,7 +3,6 @@ import styles from './register.module.css';
 import { Link } from 'react-router-dom';
 import { register } from '../../common/services/action';
 import { useForm } from '../../common/hooks/useForm';
-import { useDispatch } from 'react-redux';
 import { FormEvent } from 'react';
 import { useAppDispatch } from '../../common/hooks/hooks';
 

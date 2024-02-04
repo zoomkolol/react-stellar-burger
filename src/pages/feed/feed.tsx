@@ -1,17 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
 import styles from "./feed.module.css";
 import { useEffect } from "react";
 import { CardOrder } from "../../features/card-order/card-order";
 import { wsConnectionClosed, wsConnectionStart } from "../../common/utils/socketMiddleware/socketMiddleware-slice";
 import { WSS_URL } from "../../common/utils/constants";
 import { RootState } from "../../app/store";
-import { useAppDispatch } from "../../common/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../common/hooks/hooks";
 
 export function FeedPage() {
   const getOrdersInfo = (store: RootState) => store.websocket.message;
   const getOrders = (store: RootState) => store.websocket.message?.orders;
-  const orders = useSelector(getOrders);
-  const totalInfo = useSelector(getOrdersInfo);
+  const orders = useAppSelector(getOrders);
+  const totalInfo = useAppSelector(getOrdersInfo);
 
   const dispatch = useAppDispatch();
 
@@ -45,7 +44,7 @@ export function FeedPage() {
               <div className={`${styles.orders__container} mr-9`}>
               <p className="text text_type_main-medium mb-6">Готовы:</p>
                 <ul className={styles.list}>
-                  {doneOrders && doneOrders.map((order, index: number) => {
+                  {doneOrders && doneOrders.map((order, index) => {
                     return <li key={index}><p className={`${styles.list__element_done} text text_type_digits-default pb-2`}>{order.number}</p></li>
                   })}
                 </ul>
@@ -53,7 +52,7 @@ export function FeedPage() {
               <div className={styles.orders__container}>
                 <p className="text text_type_main-medium mb-6">В работе:</p>
                 <ul className={styles.list}>
-                  {processOrders && processOrders.map((order, index: number) => {
+                  {processOrders && processOrders.map((order, index) => {
                     return <li key={index}><p className="text text_type_digits-default pb-2">{order.number}</p></li>
                   })}
                 </ul>

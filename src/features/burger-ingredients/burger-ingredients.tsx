@@ -2,16 +2,16 @@ import React, { RefObject, useEffect, useRef } from 'react';
 import Ingredient from '../../components/ingredient/ingredient';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
-import { useDispatch, useSelector } from 'react-redux';
 import { addIngredientDetails } from '../ingredient-details/ingredient-details-slice';
 import { RootState } from '../../app/store';
 import { TIngredient } from '../../common/types/types';
+import { useAppDispatch, useAppSelector } from '../../common/hooks/hooks';
 
 function BurgerIngredients() {
   const [currentTab, setCurrentTab] = React.useState('Булки');
   const getIngredients = (state: RootState) => state.burgerIngredients.ingredients;
-  const ingredients = useSelector(getIngredients);
-  const dispatch = useDispatch();
+  const ingredients = useAppSelector(getIngredients);
+  const dispatch = useAppDispatch();
 
 
   const tabsContainerRef = useRef<HTMLDivElement>(null);
@@ -72,7 +72,7 @@ function BurgerIngredients() {
       <div id='container' className={ `${styles.ingredients} custom-scroll` }>
         <h2 ref={headingBunsRef} className="text text_type_main-medium pb-6">Булки</h2>
         <ul className={ styles.ingredientList }>
-          {ingredients.map((ingredient: TIngredient) => {
+          {ingredients.map((ingredient) => {
             if(ingredient.type !== 'bun') return null;
 
             return(
@@ -84,7 +84,7 @@ function BurgerIngredients() {
         </ul>
         <h2 ref={headingSaucesRef} className="text text_type_main-medium pt-10 pb-6">Соусы</h2>
         <ul className={ styles.ingredientList }>
-          {ingredients.map((ingredient: TIngredient) => {
+          {ingredients.map((ingredient) => {
             if(ingredient.type !== 'sauce') return null;
 
             return (<Ingredient onClick={() => {
@@ -95,7 +95,7 @@ function BurgerIngredients() {
         </ul>
         <h2 ref={headingFillingsRef} className="text text_type_main-medium pt-10 pb-6">Начинки</h2>
         <ul className={ styles.ingredientList }>
-          {ingredients.map((ingredient: TIngredient) => {
+          {ingredients.map((ingredient) => {
             if(ingredient.type !== 'main') return null;
 
             return (<Ingredient onClick={() => {

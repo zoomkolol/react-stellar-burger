@@ -1,11 +1,11 @@
 import request from "../utils/request";
 import checkResponse from "../utils/check-response";
 import { ACCESS_TOKEN, BASE_URL, REFRESH_TOKEN } from "../utils/constants";
-import { TIngredient } from "../types/types";
 
 const config = {
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    authorization: localStorage.getItem(ACCESS_TOKEN) ?? ''
   },
 }
 
@@ -23,7 +23,7 @@ export const getOrderInfoFromNumber = async (number: string) => {
     const res = await fetch(BASE_URL + `/orders/${number}`,
       {
       method: 'GET',
-      headers: config.headers,
+      headers: config.headers
     });
     return await checkResponse(res);
   } catch (err) {

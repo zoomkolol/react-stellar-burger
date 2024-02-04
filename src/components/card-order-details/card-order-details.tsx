@@ -1,11 +1,11 @@
 import styles from './card-order-details.module.css'
 import { FormattedDate, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getOrderInfoFromNumber } from '../../common/services/api';
 import { RootState } from '../../app/store';
 import { Order, TIngredient } from '../../common/types/types';
+import { useAppSelector } from '../../common/hooks/hooks';
 
 //TODO: Вынести селекторы в отдельный файл
 export default function CardOrderDetails({modal = false}) {
@@ -13,7 +13,7 @@ export default function CardOrderDetails({modal = false}) {
   const [order, setOrder] = useState<Order>();
 
   const getIngredientsData = (store: RootState) => store.burgerIngredients.ingredients;
-  const ingredientsData: TIngredient[] = useSelector(getIngredientsData);
+  const ingredientsData: TIngredient[] = useAppSelector(getIngredientsData);
 
   const orderIngredientsWithFullInfo: TIngredient[] = [];
 
